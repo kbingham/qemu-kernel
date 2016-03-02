@@ -8,6 +8,7 @@ You will need the following packages instaled on your system:
 ```
 sudo apt-get update
 sudo apt-get install -y build-essential git-core gcc-arm-linux-gnueabi qemu-system-arm
+sudo apt-get install -y texinfo libncurses5-dev python-dev bison flex
 ```
 
 ## Building
