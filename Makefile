@@ -7,9 +7,11 @@ all: binutils-gdb linux
 
 SOURCES:=$(TOP)/sources
 OBJECTS:=$(TOP)/objects
+INSTALL:=$(TOP)/install
 
 DIRS+=$(SOURCES)
 DIRS+=$(OBJECTS)
+DIRS+=$(INSTALL)
 
 #### Binutils-gdb
 
@@ -37,6 +39,7 @@ $(BINUTILS_BLD)/Makefile binutils-configure: | $(BINUTILS_BLD) $(BINUTILS_SRC)
 
 binutils-gdb: | $(BINUTILS_BLD)/Makefile
 	make -C $(BINUTILS_BLD)	-j $(J)
+	make -C $(BINUTILS_BLD) install DESTDIR=$(INSTALL)
 
 #### Linux
 
