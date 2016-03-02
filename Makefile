@@ -56,11 +56,17 @@ DIRS+=$(LINUX_BLD)
 $(LINUX_SRC): | $(SOURCES)
 	git clone $(LINUX_GIT) -b $(LINUX_BRANCH) $(LINUX_SRC)
 
+LINUX_CMD=ARCH=$(ARCH) make -C $(LINUX_SRC) O=$(LINUX_BLD)
+
 $(LINUX_BLD)/.config: | $(LINUX_SRC)
-	ARCH=$(ARCH) make -C $(LINUX_SRC) O=$(LINUX_BLD) $(LINUX_DEFCONFIG)
+	$(LINUX_CMD) $(LINUX_DEFCONFIG)
+	$(LINUX_SRC)/scripts/config --file $(LINUX_BLD)/.config \
+		--enable DEBUG_INFO \
+		--enable GDB_SCRIPTS
+	yes "" | $(LINUX_CMD) oldconfig
 
 linux: | $(LINUX_BLD)/.config
-	ARCH=$(ARCH) make -C $(LINUX_SRC) O=$(LINUX_BLD) CROSS_COMPILE=$(LINUX_CROSS_COMPILE) -j $(J) zImage
+	ARCH=$(ARCH) make -C $(LINUX_SRC) O=$(LINUX_BLD) CROSS_COMPILE=$(LINUX_CROSS_COMPILE) -j $(J) zImage dtbs
 
 #### Directories
 
